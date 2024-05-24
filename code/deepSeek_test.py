@@ -9,6 +9,7 @@ client = OpenAI(api_key="sk-71287091fdfe4b2888b64653fbbf5fac", base_url="https:/
 # prompt = "You are a professional teacher, who are judging items. For the problem, there are two answers, [1] and [2]. You need to choose the better one based on the instruction and the input. Please show your anwser with a pair of brackets directly in the response, like [0], [1] or [2]. If you think [1] is better than [2], return [1]. If you think [2] is better than [1], return [2]. If you think they are similar, return [0].  You don't need to give other addtional response. "
 pandalm_prompt = "For the problem, there are two answers, [1] and [2]. You need to choose the better one based on the instruction and the input. Please show your anwser with a pair of brackets directly in the response, like [0], [1] or [2]. If you think [1] is better than [2], return [1]. If you think [2] is better than [1], return [2]. If you think they are similar, return [0].  You don't need to give other addtional response. "
 autoj_prompt = "For the problem in a specific scenario, there are two answers, [1] and [2]. You need to choose the better one based on the instruction and the input. Please show your anwser with a pair of brackets directly in the response, like [0], [1] or [2]. If you think [1] is better than [2], return [1]. If you think [2] is better than [1], return [2]. If you think they are similar, return [0].  You don't need to give other addtional response. "
+llmbar_prompt = "For the problem, there are two answers, [1] and [2]. You need to choose the better one based on the instruction and the input. Please show your anwser with a pair of brackets directly in the response, like [1] or [2]. If you think [1] is better than [2], return [1]. If you think [2] is better than [1], return [2].  You don't need to give other addtional response. "
 
 def query_LLM(question):
     response = client.chat.completions.create(
@@ -22,11 +23,15 @@ def query_LLM(question):
 
 
 
-def test_pandalm(output_filename):
+def test_pandalm(output_filename, reverse=False):
     result = []
     data = []
-    with open("../dataset/PandaLM_test.json", "r") as f:
-        data = json.load(f)
+    if reverse:
+        with open("../dataset/PandaLM_test_reverse.json", "r") as f:
+            data = json.load(f)
+    else:
+        with open("../dataset/PandaLM_test.json", "r") as f:
+            data = json.load(f)
 
     #send prompt
     try:
@@ -55,19 +60,32 @@ def test_pandalm(output_filename):
             result.append({"idx": dic["idx"], "people":peopleAnswer, "LLM": response})
     except Exception as e:
         print(e)
+        if reverse:
+            with open("../result/%s_reverse.json"%(output_filename), "w") as f:
+                json.dump(result, f, indent=4)
+        else:
+            with open("../result/%s.json"%(output_filename), "w") as f:
+                json.dump(result, f, indent=4)
+    if reverse:
+        with open("../result/%s_reverse.json"%(output_filename), "w") as f:
+            json.dump(result, f, indent=4)
+    else:
         with open("../result/%s.json"%(output_filename), "w") as f:
             json.dump(result, f, indent=4)
-    with open("../result/%s.json"%(output_filename), "w") as f:
-        json.dump(result, f, indent=4)
     
     return
 
-def test_autoj(output_filename):
+def test_autoj(output_filename, reverse=False):
     result = []
     data = []
-    with open("../dataset/AutoJ_test.jsonl", "r") as f:
-        for line in f:
-            data.append(json.loads(line.strip()))
+    if reverse:
+        with open("../dataset/AutoJ_test_reverse.jsonl", "r") as f:
+            for line in f:
+                data.append(json.loads(line.strip()))
+    else:
+        with open("../dataset/AutoJ_test.jsonl", "r") as f:
+            for line in f:
+                data.append(json.loads(line.strip()))
     
     #send prompt
     try:
@@ -92,21 +110,32 @@ def test_autoj(output_filename):
             idx += 1
     except Exception as e:
         print(e)
+        if reverse:
+            with open("../result/%s_reverse.json"%(output_filename), "w") as f:
+                json.dump(result, f, indent=4)
+        else:
+            with open("../result/%s.json"%(output_filename), "w") as f:
+                json.dump(result, f, indent=4)
+    if reverse:
+        with open("../result/%s_reverse.json"%(output_filename), "w") as f:
+            json.dump(result, f, indent=4)
+    else:
         with open("../result/%s.json"%(output_filename), "w") as f:
             json.dump(result, f, indent=4)
-    with open("../result/%s.json"%(output_filename), "w") as f:
-        json.dump(result, f, indent=4)
     
     return
 
 
-def test_llmbar(output_filename):
+def test_llmbar(output_filename, reverse=False):
     result = []
     data = []
 
-    with open("../dataset/LLMBar.json", "r") as f:
-        data = json.load(f)
-        print(data)
+    if reverse:
+        with open("../dataset/LLMBar_test_reverse.json", "r") as f:
+            data = json.load(f)
+    else:
+        with open("../dataset/LLMBar.json", "r") as f:
+            data = json.load(f)
     
     #send prompt
     try:
@@ -121,7 +150,7 @@ def test_llmbar(output_filename):
             instruction = dic["input"]
             answer1 = dic["output_1"]
             answer2 = dic["output_2"]
-            query = autoj_prompt+ "\nInstruction: "+ instruction + "\nAnswer 1: "+ str(answer1) + "\nAnswer 2: "+ str(answer2)
+            query = llmbar_prompt+ "\nInstruction: "+ instruction + "\nAnswer 1: "+ str(answer1) + "\nAnswer 2: "+ str(answer2)
 
             peopleAnswer = dic["label"]
             response = query_LLM(query)
@@ -130,17 +159,25 @@ def test_llmbar(output_filename):
             idx += 1
     except Exception as e:
         print(e)
+        if reverse:
+            with open("../result/%s_reverse.json"%(output_filename), "w") as f:
+                json.dump(result, f, indent=4)
+        else:
+            with open("../result/%s.json"%(output_filename), "w") as f:
+                json.dump(result, f, indent=4)
+    if reverse:
+        with open("../result/%s_reverse.json"%(output_filename), "w") as f:
+            json.dump(result, f, indent=4)
+    else:
         with open("../result/%s.json"%(output_filename), "w") as f:
             json.dump(result, f, indent=4)
-    with open("../result/%s.json"%(output_filename), "w") as f:
-        json.dump(result, f, indent=4)
     
     return
 
 if __name__ == "__main__":
 
     if len(sys.argv) < 3:
-        print("Usage: python script.py benchmark(PandaLM/Auto-J/LLMBar/MTBench) output_filename")
+        print("Usage: python script.py benchmark(PandaLM/Auto-J/LLMBar/MTBench + _reverse) output_filename")
         sys.exit(1)
     
     benchmark_name = sys.argv[1]
@@ -150,3 +187,9 @@ if __name__ == "__main__":
         test_autoj(sys.argv[2])
     elif benchmark_name == "LLMBar":
         test_llmbar(sys.argv[2])
+    elif benchmark_name == "PandaLM_reverse":
+        test_pandalm(sys.argv[2],True)
+    elif benchmark_name == "AutoJ_reverse":
+        test_autoj(sys.argv[2],True)
+    elif benchmark_name == "LLMBar_reverse":
+        test_llmbar(sys.argv[2],True)
