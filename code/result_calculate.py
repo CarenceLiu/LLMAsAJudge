@@ -24,7 +24,7 @@ if __name__ == "__main__":
         result[people][llm] += 1
         total += 1
     
-    if sum(result[0]) != 0:
+    if result[0][0] + result[1][0] + result[2][0] != 0:
         accuracy = (result[0][0] + result[1][1] + result[2][2])*100/total
         p0 = result[0][0]/(result[0][0]+result[1][0]+result[2][0])
         p1 = result[1][1]/(result[0][1]+result[1][1]+result[2][1])
@@ -42,5 +42,8 @@ if __name__ == "__main__":
         r1 = result[1][1]/(sum(result[1]))
         r2 = result[2][2]/(sum(result[2]))
         r = (r1+r2)/3
+    print(result[0][0]," ",result[0][1]," ",result[0][2])
+    print(result[1][0]," ",result[1][1]," ",result[1][2])
+    print(result[2][0]," ",result[2][1]," ",result[2][2])
     print("%s accuracy: %.2f, F1 score: %.2f"%(sys.argv[1], accuracy, 2*p*r*100/(p+r)))
     

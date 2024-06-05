@@ -8,7 +8,13 @@ client = OpenAI(api_key="sk-71287091fdfe4b2888b64653fbbf5fac", base_url="https:/
 
 # prompt = "You are a professional teacher, who are judging items. For the problem, there are two answers, [1] and [2]. You need to choose the better one based on the instruction and the input. Please show your anwser with a pair of brackets directly in the response, like [0], [1] or [2]. If you think [1] is better than [2], return [1]. If you think [2] is better than [1], return [2]. If you think they are similar, return [0].  You don't need to give other addtional response. "
 pandalm_prompt = "For the problem, there are two answers, [1] and [2]. You need to choose the better one based on the instruction and the input. Please show your anwser with a pair of brackets directly in the response, like [0], [1] or [2]. If you think [1] is better than [2], return [1]. If you think [2] is better than [1], return [2]. If you think they are similar, return [0].  You don't need to give other addtional response. "
-autoj_prompt = "For the problem in a specific scenario, there are two answers, [1] and [2]. You need to choose the better one based on the instruction and the input. Please show your anwser with a pair of brackets directly in the response, like [0], [1] or [2]. If you think [1] is better than [2], return [1]. If you think [2] is better than [1], return [2]. If you think they are similar, return [0].  You don't need to give other addtional response. "
+# autoj_prompt = "For the problem in a specific scenario, there are two answers, [1] and [2]. You need to choose the better one based on the instruction and the input. Please show your anwser with a pair of brackets directly in the response, like [0], [1] or [2]. If you think [1] is better than [2], return [1]. If you think [2] is better than [1], return [2]. If you think they are similar, return [0].  You don't need to give other addtional response. "
+# autoj_prompt = "There are one instruction and two responses ([1] and [2]). You need to choose the better one based on the instruction and the input. Please show your anwser with a pair of brackets directly in the response, like [0], [1] or [2]. If you think [1] is better than [2], return [1]. If you think [2] is better than [1], return [2]. If you think they are similar, return [0].  You don't need to give other addtional response. "
+# autoj_prompt = "For the problem in a specific scenario, there are one instruction and two responses ([1] and [2]). You need to choose the better one based on the instruction and the input. Please show your anwser with a pair of brackets directly in the response, like [0], [1] or [2]. If you think [1] is better than [2], return [1]. If you think [2] is better than [1], return [2]. If there is no significant difference between the two , return [0]. For example: scenario: reading_comprehensio, task:Read the table below regarding \"Shagun Sharma\" to answer the given question.\n\nYear | 2016 | 2016 | 2019 | 2017 | 2019 | 2017\u201318 | 2019 | 2015\nChannel | Sony TV | &TV | &TV | Star Plus | &TV | Colors TV | &TV | Star Plus\nTitle | Kuch Rang Pyar Ke Aise Bhi | Gangaa | Shaadi Ke Siyape | Iss Pyaar Ko Kya Naam Doon 3 | Vikram Betaal Ki Rahasya Gatha | Tu Aashiqui | Laal Ishq | Kuch Toh Hai Tere Mere Darmiyaan\nRole | Khushi | Aashi Jhaa | Dua | Meghna Narayan Vashishth | Rukmani/Kashi | Richa Dhanrajgir | Pernia | Sanjana Kapoor\n\nQuestion: What TV shows was Shagun Sharma seen in 2019?, response 1: In 2019, Shagun Sharma was seen in the TV shows \"Shaadi Ke Siyape\" and \"Vikram Betaal Ki Rahasya Gatha\" on &TV, as well as \"Laal Ishq\" also on &TV. response 2: Shagun Sharma was seen in the TV shows Kuch Rang Pyar Ke Aise Bhi, Gangaa, Iss Pyaar Ko Kya Naam Doon 3, Vikram Betaal Ki Rahasya Gatha, and Tu Aashiqui. Your anwser should be [0]"
+# autoj_prompt = "There are one instruction and two responses ([1] and [2]). You need to choose the better one based on the instruction and the input. Please show your anwser with a pair of brackets directly in the response, like [1] or [2]. If you think [1] is better than [2], return [1]. If you think [2] is better than [1], return [2]. You don't need to give other addtional response. "
+autoj_prompt = "For the problem in a specific scenario, there are one instruction and two responses ([1] and [2]). You need to choose the better one based on the instruction and the input. Please show your anwser with a pair of brackets directly in the response, like [0], [1] or [2]. If you think [1] is better than [2], return [1]. If you think [2] is better than [1], return [2]. If there is no significant difference between the two , return [0]. For example: Read the table below regarding \"Shagun Sharma\" to answer the given question.\n\nYear | 2016 | 2016 | 2019 | 2017 | 2019 | 2017\u201318 | 2019 | 2015\nChannel | Sony TV | &TV | &TV | Star Plus | &TV | Colors TV | &TV | Star Plus\nTitle | Kuch Rang Pyar Ke Aise Bhi | Gangaa | Shaadi Ke Siyape | Iss Pyaar Ko Kya Naam Doon 3 | Vikram Betaal Ki Rahasya Gatha | Tu Aashiqui | Laal Ishq | Kuch Toh Hai Tere Mere Darmiyaan\nRole | Khushi | Aashi Jhaa | Dua | Meghna Narayan Vashishth | Rukmani/Kashi | Richa Dhanrajgir | Pernia | Sanjana Kapoor\n\nQuestion: What TV shows was Shagun Sharma seen in 2019?, response 1 Shagun Sharma was seen in \"Shaadi Ke Siyape\" and \"Vikram Betaal Ki Rahasya Gatha\" in 2019., response 2: In 2019, Shagun Sharma was seen in the TV shows \"Shaadi Ke Siyape\" and \"Vikram Betaal Ki Rahasya Gatha\" on &TV, and \"Laal Ishq\" on &TV. Your anwser should be [1]"
+
+
 llmbar_prompt = "For the problem, there are two answers, [1] and [2]. You need to choose the better one based on the instruction and the input. Please show your anwser with a pair of brackets directly in the response, like [1] or [2]. If you think [1] is better than [2], return [1]. If you think [2] is better than [1], return [2].  You don't need to give other addtional response. "
 
 def query_LLM(question):
@@ -17,6 +23,7 @@ def query_LLM(question):
         messages=[
             {"role": "user", "content": question}
         ],
+        # temperature=0.0,
         stream=False
     )
     return response.choices[0].message.content
@@ -36,7 +43,7 @@ def test_pandalm(output_filename, reverse=False):
     #send prompt
     try:
         for dic in data:
-            sleep_time = random.uniform(0, 0.5)
+            sleep_time = random.uniform(0, 0.05)
             time.sleep(sleep_time)
 
             answerList = [0,0,0]
@@ -94,15 +101,15 @@ def test_autoj(output_filename, reverse=False):
             # if idx <= current_idx+1:
             #     idx += 1 
             #     continue
-            sleep_time = random.uniform(0, 0.5)
+            sleep_time = random.uniform(0, 0.05)
             time.sleep(sleep_time)
 
             instruction = dic["prompt"]
             answer1 = dic["response 1"]
             answer2 = dic["response 2"]
             scenario = dic["scenario"]
-            query = autoj_prompt + "\nScenario: " + scenario + "\nInstruction: "+ instruction + "\nAnswer 1: "+ str(answer1) + "\nAnswer 2: "+ str(answer2)
-
+            # query = autoj_prompt + "\nScenario: " + scenario + "\nInstruction: "+ instruction + "\nAnswer 1: "+ str(answer1) + "\nAnswer 2: "+ str(answer2)
+            query = autoj_prompt + "\nInstruction: "+ instruction + "\nAnswer 1: "+ str(answer1) + "\nAnswer 2: "+ str(answer2)
             peopleAnswer = dic["label"]
             response = query_LLM(query)
             print(idx, ", LLM: ", response, " people: ", peopleAnswer)
@@ -144,7 +151,7 @@ def test_llmbar(output_filename, reverse=False):
             # if idx <= current_idx+1:
             #     idx += 1 
             #     continue
-            sleep_time = random.uniform(0, 0.5)
+            sleep_time = random.uniform(0, 0.05)
             time.sleep(sleep_time)
 
             instruction = dic["input"]
